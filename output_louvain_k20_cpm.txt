@@ -1,0 +1,23 @@
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	1.921875	31.28125	CPM	0.1	16258.599999999993
+louvain	31.28125	32.921875	CPM	0.1	16258.599999999993
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	34.453125	61.59375	CPM	1.0	0.0	1667	0	0
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	89.765625	116.46875	CPM	10.0	0.0
+
+
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	2.65625	43.15625	CPM	0.1	16217.699999999999
+louvain	43.15625	45.84375	CPM	0.1	16217.699999999999
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	47.890625	88.0	CPM	1.0	0.0	1667	0	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	130.984375	170.703125	CPM	10.0	0.0
+
