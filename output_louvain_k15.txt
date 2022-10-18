@@ -1,0 +1,44 @@
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	1.703125	71.796875	CPM	0.1	19915.699999999957
+louvain	71.796875	75.53125	CPM	0.1	19915.699999999957
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	76.671875	119.859375	CPM	10	0
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	121.140625	162.03125	modularity	0.1	0.45860743414108907
+louvain	162.03125	162.6875	modularity	0.1	0.45860743414108907
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	164.078125	226.0625	modularity	10	0.11192068113838403
+louvain	226.0625	228.328125	modularity	10	0.11192068113838403
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	229.59375	293.984375	CPM	0.1	19915.699999999957
+louvain	293.984375	297.765625	CPM	0.1	19915.699999999957
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	298.96875	343.46875	CPM	10	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	344.890625	386.78125	modularity	0.1	0.45860743414108907
+louvain	386.78125	387.46875	modularity	0.1	0.45860743414108907
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	389.1875	446.984375	modularity	10	0.11192068113838403
+louvain	446.984375	449.84375	modularity	10	0.11192068113838403
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	1.90625	61.25	CPM	1	0	2606	0	0
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	113.3125	170.203125	modularity	1	0.3046951808379142	9	6	0
+louvain	171.234375	172.3125	modularity	1	0.3046951808379142	9	7	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	174.75	228.578125	CPM	1	0	2606	0	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+louvain	359.25	521.390625	modularity	1	0.3046951808379142	9	6	0
+louvain	524.203125	527.140625	modularity	1	0.3046951808379142	9	7	0

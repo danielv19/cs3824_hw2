@@ -1,0 +1,47 @@
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	1.5625	564.03125	CPM	0.1	19733.79999999983
+leiden	573.078125	613.90625	CPM	0.1	19818.79999999983
+leiden	614.015625	650.0625	CPM	0.1	19818.899999999827
+leiden	650.203125	690.8125	CPM	0.1	19818.899999999827
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	692.03125	737.0	CPM	10	0
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	738.515625	981.921875	modularity	0.1	0.4304441915580187
+leiden	1044.25	1092.53125	modularity	0.1	0.4304441915580187
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	1093.671875	2545.671875	modularity	10	0.10919045926106813
+leiden	2546.015625	2611.40625	modularity	10	0.10923207861707537
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	2612.5625	3082.890625	CPM	0.1	19733.79999999983
+leiden	3090.375	3123.40625	CPM	0.1	19799.79999999983
+leiden	3123.515625	3155.140625	CPM	0.1	19799.79999999983
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	3156.234375	3190.84375	CPM	10	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	3191.984375	3436.140625	modularity	0.1	0.4304441915580187
+leiden	3507.859375	3553.75	modularity	0.1	0.4304441915580187
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	3555.140625	5027.203125	modularity	10	0.10919045926106813
+leiden	5027.421875	5099.46875	modularity	10	0.10923207861707537
+
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	1.375	41.90625	CPM	1	0	2606	0	0
+human
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	86.0	423.90625	modularity	1	0.32110645848389996	4	0	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	425.890625	474.4375	CPM	1	0	2606	0	0
+string
+algo	start	stop	type	gamma	mod	partition_len	disconnected	badly_connected
+leiden	522.53125	845.015625	modularity	1	0.32110645848389996	4	0	0
+
