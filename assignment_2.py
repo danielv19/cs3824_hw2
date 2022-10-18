@@ -13,7 +13,7 @@ Neighbors = {}
 #num of edges in graph
 edges = 0
 #output file
-outfile = open(f"output_newlouvain_k20.txt",'w')
+outfile = open(f"output_leiden_gammas_k15.txt",'w')
 #dict of cluster_degree_sum per cluster
 cluster_degree_sum_dict ={}
 #dict of edges within cluster
@@ -26,6 +26,8 @@ global_edge_contr = [0, []]
 exiting_modularity = 0
 #len of paritition
 max_partition_len = 0
+#total change
+total_change_mnf = 0
 
 #bypass delta function usage by only looking at nodes within the cluster
 def modularity(gamma, partition):
@@ -193,6 +195,7 @@ def move_nodes(h_old,g,partition,get_cluster,gamma,is_cpm):
   global cluster_edges_dict
   global exiting_modularity
   
+  print("back in")
   start = process_time() 
   while True:
     total_change = 0
@@ -234,13 +237,14 @@ def move_nodes(h_old,g,partition,get_cluster,gamma,is_cpm):
     
     h_new = h_old + total_change
     if h_new <= h_old:
+      print("gottem")
       #return new partition
       stop = process_time() 
       type_mod = "CPM" if (is_cpm) else "modularity"
+      exiting_modularity = h_new
       output = f"louvain\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}\t{clean_partition(partition)}\t{disconnected_count(partition,get_cluster)}\t{badly_connected_count(g,partition,get_cluster,gamma,is_cpm)}" if (gamma == 1.0) else f"louvain\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}"
       outfile.write(output)
       outfile.write('\n')
-      exiting_modularity = h_new
       return partition
     else:
       h_old = h_new
@@ -257,7 +261,8 @@ def louvain(g,partition, get_cluster,gamma,is_cpm):
     else:
       h_old = exiting_modularity
 
-def move_nodes_fast(g,partition, get_cluster,gamma,is_cpm,print_a):
+def move_nodes_fast(original,g,partition, get_cluster,gamma,is_cpm,print_a):
+  global total_change_mnf
   global exiting_modularity
   global cluster_edge_contribution
   global cluster_degree_sum_dict
@@ -321,18 +326,19 @@ def move_nodes_fast(g,partition, get_cluster,gamma,is_cpm,print_a):
         cluster_edge_contribution[n][0] += 1
         cluster_edge_contribution[n][1].append(v)
   
-  exiting_modularity = total_change
+  total_change_mnf = total_change
   #outputting needed data
   if print_a:
     stop = process_time() 
-    h_new = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
+    h_new = original + total_change
+    exiting_modularity = h_new
     type_mod = "CPM" if (is_cpm) else "modularity"
-    output = f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}\t{clean_partition(partition)}\t{0}\{badly_connected_count(g,partition,get_cluster,gamma,is_cpm)}" if (gamma == 1.0) else f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}"
+    output = f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}\t{clean_partition(partition)}\t{0}\t{badly_connected_count(g,partition,get_cluster,gamma,is_cpm)}" if (gamma == 1.0) else f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}"
     outfile.write(output)
     outfile.write('\n')
   #return new partition
   return partition #clean_partition(partition) 
- 
+   
 #assign each node to it's cluster/community
 def singleton_partition(g,get_cluster):
   partition = {}
@@ -381,7 +387,6 @@ def refine_partition(gamma,g,partition,get_cluster,is_cpm):
 
   return [p_refined, c_refined]
     
-
 def clean_partition(partition):
   count = 0
   for cluster in partition:
@@ -432,13 +437,17 @@ def merge_node_subset(gamma,g,partition,get_cluster,cluster,is_cpm,original):
 
 def leiden(g,partition,get_cluster,gamma,is_cpm,a_print):
   threshold = 0.001
-  h_old = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
+  if a_print:
+    h_old = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
+  else:
+    h_old = exiting_modularity
+  
   while True:
     print("going in move nodes fast")
-    partition = move_nodes_fast(g,partition,get_cluster,gamma,is_cpm,a_print) #clean_partition(move_nodes_fast(g,partition,get_cluster,gamma,is_cpm))
+    partition = move_nodes_fast(h_old,g,partition,get_cluster,gamma,is_cpm,a_print) #clean_partition(move_nodes_fast(g,partition,get_cluster,gamma,is_cpm))
     print("out of move nodes fast")
     #print(f"cleaned:")
-    h_new = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
+    h_new = h_old + total_change_mnf
     if (h_new - h_old) < threshold:
       break
     else:
@@ -556,6 +565,7 @@ def parse_human_network(k_count):
     Neighbors[second].append(first)
   max_partition_len = count
   input_file.close()
+  print(len(g.nodes()))
   return g
 
 def parse_string_network(k_count):
@@ -623,19 +633,18 @@ def parse_string_network(k_count):
 
   max_partition_len = count
   input_file.close()
-
+  print(len(g.nodes()))
   return g
-
 
 def data_collection():
   global Cluster_Dict
   global Cluster_List_Dict
-  gammas = [0.1,1.0,10.0]
+  gammas = [0.1,1,10]
   for i in range(2):
     for q in range(2):
       for j in range(2):
         for gamma in gammas:
-          g =  parse_human_network(5) if (j==0) else parse_string_network(5)
+          g =  parse_human_network(15) if (j==0) else parse_string_network(15)
           name = "human" if (q == 0) else "string"
           outfile.write(f"{name}\n")
           outfile.write("algo\tstart\tstop\ttype\tgamma\tmod\tpartition_len\tdisconnected\tbadly_connected\n")
@@ -648,7 +657,6 @@ def data_collection():
           print(f"finished {name} {i} {q} {j} {gamma}")
 
     outfile.write('\n')
-
 
 def testing():
   global Cluster_Dict
@@ -694,7 +702,8 @@ def testing():
     for n in Neighbors[v]:
       g.add_edge(v,n)    
   
-  leiden(g,Cluster_List_Dict,Cluster_Dict,0.1,True,True)
+  louvain(g,Cluster_List_Dict,Cluster_Dict,0.1,True)
+  print(cpm(0.1,Cluster_List_Dict))
   print(Cluster_List_Dict)
 
 data_collection()
