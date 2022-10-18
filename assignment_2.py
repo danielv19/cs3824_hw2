@@ -13,7 +13,7 @@ Neighbors = {}
 #num of edges in graph
 edges = 0
 #output file
-outfile = open(f"output_louvain_k.txt",'w')
+outfile = open(f"output_newlouvain_k20.txt",'w')
 #dict of cluster_degree_sum per cluster
 cluster_degree_sum_dict ={}
 #dict of edges within cluster
@@ -187,7 +187,7 @@ def cluster_edges(u, cluster, get_cluster):
       global_edge_contr[1].append(neighboor)
   return degree_sum
 
-def move_nodes(g,partition,get_cluster,gamma,is_cpm):
+def move_nodes(h_old,g,partition,get_cluster,gamma,is_cpm):
   global cluster_degree_sum_dict
   global cluster_edge_contribution
   global cluster_edges_dict
@@ -196,7 +196,6 @@ def move_nodes(g,partition,get_cluster,gamma,is_cpm):
   start = process_time() 
   while True:
     total_change = 0
-    h_old = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
     for v in g.nodes():
       max_change = 0
       best_cluster = get_cluster[v] #put the original cluster as the best
@@ -243,13 +242,15 @@ def move_nodes(g,partition,get_cluster,gamma,is_cpm):
       outfile.write('\n')
       exiting_modularity = h_new
       return partition
+    else:
+      h_old = h_new
       
 def louvain(g,partition, get_cluster,gamma,is_cpm):
   threshold = 0.001
-  h_old = 0
+  h_old = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
 
   while True:
-    partition = move_nodes(g,partition, get_cluster,gamma,is_cpm)
+    partition = move_nodes(h_old,g,partition, get_cluster,gamma,is_cpm)
     if (exiting_modularity - h_old) < threshold:
       #return new partition
       return partition
@@ -321,18 +322,17 @@ def move_nodes_fast(g,partition, get_cluster,gamma,is_cpm,print_a):
         cluster_edge_contribution[n][1].append(v)
   
   exiting_modularity = total_change
-  print("done fast")
   #outputting needed data
   if print_a:
     stop = process_time() 
     h_new = cpm(gamma,partition) if (is_cpm) else modularity(gamma,partition)
     type_mod = "CPM" if (is_cpm) else "modularity"
-    output = f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}\t{clean_partition(partition)}\t{disconnected_count(partition,get_cluster)}\{badly_connected_count(g,partition,get_cluster,gamma,is_cpm)}" if (gamma == 1.0) else f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}"
+    output = f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}\t{clean_partition(partition)}\t{0}\{badly_connected_count(g,partition,get_cluster,gamma,is_cpm)}" if (gamma == 1.0) else f"leiden\t{start}\t{stop}\t{type_mod}\t{gamma}\t{h_new}"
     outfile.write(output)
     outfile.write('\n')
   #return new partition
   return partition #clean_partition(partition) 
-   
+ 
 #assign each node to it's cluster/community
 def singleton_partition(g,get_cluster):
   partition = {}
